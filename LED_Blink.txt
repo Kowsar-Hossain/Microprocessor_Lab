@@ -26,20 +26,21 @@ void delay(unsigned int ms){
 
 int main(void){
 	//Enable GPIOC and TIM2 clocks
-	RCC_APB2ENR |= (1U << 4);
-	RCC_APB1ENR |= (1U << 0);
+	RCC_APB2ENR |=(1U << 4);
+	RCC_APB1ENR |=(1U << 0);
 
-	GPIOC_CRH &= 0xFF0FFFFF;
-	GPIOC_CRH |= 0x00200000;
+	GPIOC_CRH &= ~(0xF << 20);
+	GPIOC_CRH &= ~(1U << 20);
+
+	GPIOC_CRH |= (1U << 21);
 
 	TIM2_PSC = 7999;
-	TIM2_ARR = 500;
+	TIM2_ARR = 1999;
 	TIM2_SR = 0;
 	TIM2_CR1 = 0x1;
 
 	while(1){
-		GPIOC_ODR = 0x2000;
-		delay(1000);
-	}
-
+		GPIOC_ODR   GPIOC_ODR ^=(1U << 13);
+		delay(TIM2_ARR);
+}
 }
